@@ -14,14 +14,14 @@
 <!-- Hero Header with Background -->
 <header
 	class="relative flex w-full flex-col gap-30 bg-cover bg-center bg-no-repeat
-{isHomePage ? 'bg-transparent pt-10 pb-20' : 'bg-gradient-to-r from-blue-900 to-blue-800 pt-10'}
+	{isHomePage ? 'bg-transparent pt-10 pb-20' : 'bg-gradient-to-r from-blue-900 to-blue-800 pt-10'}
 "
 >
 	<!-- Navigation Bar -->
 	<nav class="bg-opacity-95 relative z-20 w-full {isHomePage && 'shadow-sm'} bg-transparent">
 		<div
 			class="mx-auto max-w-7xl rounded-full px-4 text-white {isHomePage &&
-				'shadow-sm'} backdrop-blur-sm sm:px-6 lg:px-8"
+				'shadow-sm backdrop-blur-sm '} sm:px-6 lg:px-8"
 		>
 			<div class="flex h-16 items-center justify-between">
 				<div class="flex items-center">

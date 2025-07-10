@@ -1,5 +1,6 @@
 <script>
 	import DestinationCard from '$lib/components/destination-card.svelte';
+
 	const trips = [
 		{
 			title: 'Copenhagen City Trip',
@@ -14,6 +15,14 @@
 			emoji: '🇩🇪',
 			gradientFrom: '#06B6D4',
 			gradientTo: '#06B6D4'
+		},
+		{
+			title: 'New Trip?',
+			description: 'Click to start planning your next trip or to add previous ones!',
+			emoji: '+ 🚀❔',
+			gradientFrom: '#008000',
+			gradientTo: '#008000',
+			ctaText: 'Create New Trip'
 		}
 	];
 </script>
