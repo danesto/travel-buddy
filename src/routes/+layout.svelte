@@ -37,7 +37,7 @@
 	<!-- Dark overlay for better text readability -->
 
 		{#if isHomePage}
-			<img src={hero} alt="Hero Image" class="absolute inset-0 w-full h-full object-cover">
+			<img src={hero} alt="Hero" class="absolute inset-0 w-full h-full object-cover brightness-60">
 		{/if}
 
 	<!-- <div class="absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-800 bg-opacity-50"></div> -->
