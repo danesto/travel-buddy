@@ -1,54 +1,39 @@
-
+<script>
+	import DestinationCard from '$lib/components/destination-card.svelte';
+</script>
 
 <!-- Featured Destinations Section -->
-<section class="py-16 px-4 max-w-7xl mx-auto">
-    <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold text-gray-800 font-serif mb-4">
-            Featured Destinations
-        </h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-            Discover breathtaking locations around the world, carefully curated for your next adventure
-        </p>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
-            <div class="h-48 bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
-                <div class="text-white text-center">
-                    <div class="text-6xl mb-2">🏖️</div>
-                    <h3 class="text-xl font-semibold">Tropical Paradise</h3>
-                </div>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-600 mb-4">Discover pristine beaches and crystal-clear waters in exotic locations around the world.</p>
-                <div class="text-cyan-600 font-medium group-hover:text-cyan-800 transition-colors">Explore tropical destinations →</div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
-            <div class="h-48 bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center">
-                <div class="text-white text-center">
-                    <div class="text-6xl mb-2">🏔️</div>
-                    <h3 class="text-xl font-semibold">Mountain Adventures</h3>
-                </div>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-600 mb-4">Experience breathtaking peaks, hiking trails, and alpine adventures in stunning mountain ranges.</p>
-                <div class="text-cyan-600 font-medium group-hover:text-cyan-800 transition-colors">Explore mountain destinations →</div>
-            </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
-            <div class="h-48 bg-gradient-to-br from-cyan-400 to-sky-500 flex items-center justify-center">
-                <div class="text-white text-center">
-                    <div class="text-6xl mb-2">🏛️</div>
-                    <h3 class="text-xl font-semibold">Cultural Cities</h3>
-                </div>
-            </div>
-            <div class="p-6">
-                <p class="text-gray-600 mb-4">Immerse yourself in rich history, vibrant cultures, and amazing architecture in world-class cities.</p>
-                <div class="text-cyan-600 font-medium group-hover:text-cyan-800 transition-colors">Explore city destinations →</div>
-            </div>
-        </div>
-    </div>
+<section class="mx-auto max-w-7xl px-4 py-10">
+	<div class="mb-12 text-center">
+		<h2 class="mb-4 font-serif text-4xl font-bold text-gray-800">Featured Destinations</h2>
+		<p class="mx-auto max-w-2xl text-lg text-gray-600">
+			Discover breathtaking locations around the world, carefully curated for your next adventure
+		</p>
+	</div>
+
+	<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+		<DestinationCard
+			title="Tropical Paradise"
+			description="Discover pristine beaches and crystal-clear waters in exotic locations around the world."
+			emoji="🏖️"
+			gradientFrom="#60A5FA"
+			gradientTo="#06B6D4"
+		/>
+
+		<DestinationCard
+			title="Mountain Adventures"
+			description="Experience breathtaking peaks, hiking trails, and alpine adventures in stunning mountain ranges."
+			emoji="🏔️"
+			gradientFrom="#38BDF8"
+			gradientTo="#3B82F6"
+		/>
+
+		<DestinationCard
+			title="Cultural Cities"
+			description="Immerse yourself in rich history, vibrant cultures, and amazing architecture in world-class cities."
+			emoji="🏛️"
+			gradientFrom="#06B6D4"
+			gradientTo="#0EA5E9"
+		/>
+	</div>
 </section>
