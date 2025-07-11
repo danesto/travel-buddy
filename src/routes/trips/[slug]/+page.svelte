@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import CollapsibleSection from '$lib/components/CollapsibleSection.svelte';
+	import CollapsibleSection from '$lib/components/collapsible-section.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	// Hardcoded trip data - in real app this would come from a database
 	const tripData = {
@@ -208,9 +209,7 @@ Santorini exceeded all expectations - it's a place that captures your heart and 
 	<div
 		class="relative h-80 w-full bg-cover bg-center bg-no-repeat"
 		style="background-image: url('{tripData.headerImage}');"
-	>
-		<!-- <div class="bg-opacity-30 absolute inset-0 bg-black"></div> -->
-	</div>
+	></div>
 
 	<!-- Main Content -->
 	<div class="relative z-10 mx-auto -mt-20 max-w-4xl px-4">
@@ -230,8 +229,30 @@ Santorini exceeded all expectations - it's a place that captures your heart and 
 						</div>
 					</div>
 					<div class="flex items-center gap-4 pb-4">
-						<a href={`/trips/${tripData.slug}/itinerary`} class="text-green-700">Itenirary </a>
-						<a href={`/trips/${tripData.slug}/diary`} class="text-green-700">Trip Diary </a>
+						<Button
+							variant="link"
+							size="sm"
+							href={`/trips/${tripData.slug}/itinerary`}
+							class="text-green-700"
+						>
+							Itenirary
+						</Button>
+						<Button
+							variant="link"
+							size="sm"
+							href={`/trips/${tripData.slug}/diary`}
+							class="text-green-700"
+						>
+							Trip Diary
+						</Button>
+						<Button
+							variant="link"
+							size="sm"
+							href={`/trips/${tripData.slug}/diary`}
+							class="text-green-700"
+						>
+							Expenses
+						</Button>
 					</div>
 					<div class="flex items-center gap-4 text-gray-600">
 						<span class="flex items-center gap-1">
