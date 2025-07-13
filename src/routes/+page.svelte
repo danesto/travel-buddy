@@ -14,7 +14,7 @@
 	<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
 		<DestinationCard
 			title="Tropical Paradise"
-			description="Discover pristine beaches and crystal-clear waters in exotic locations around the world."
+			summary="Discover pristine beaches and crystal-clear waters in exotic locations around the world."
 			emoji="🏖️"
 			gradientFrom="#60A5FA"
 			gradientTo="#06B6D4"
@@ -22,7 +22,7 @@
 
 		<DestinationCard
 			title="Mountain Adventures"
-			description="Experience breathtaking peaks, hiking trails, and alpine adventures in stunning mountain ranges."
+			summary="Experience breathtaking peaks, hiking trails, and alpine adventures in stunning mountain ranges."
 			emoji="🏔️"
 			gradientFrom="#38BDF8"
 			gradientTo="#3B82F6"
@@ -30,7 +30,7 @@
 
 		<DestinationCard
 			title="Cultural Cities"
-			description="Immerse yourself in rich history, vibrant cultures, and amazing architecture in world-class cities."
+			summary="Immerse yourself in rich history, vibrant cultures, and amazing architecture in world-class cities."
 			emoji="🏛️"
 			gradientFrom="#06B6D4"
 			gradientTo="#0EA5E9"

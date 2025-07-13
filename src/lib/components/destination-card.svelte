@@ -1,5 +1,5 @@
 <script>
-	let { title, description, emoji, gradientFrom, gradientTo, ctaText = undefined } = $props();
+	let { title, summary, emoji, gradientFrom, gradientTo, ctaText = undefined } = $props();
 
 	let ctaLabel = ctaText ?? `Explore ${title.toLowerCase()} →`;
 
@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="p-6">
-		<p class="mb-4 text-gray-600">{description}</p>
+		<p class="mb-4 text-gray-600">{summary}</p>
 		<div class="font-medium text-cyan-600 transition-colors group-hover:text-cyan-800">
 			<div class="font-medium text-cyan-600 transition-colors group-hover:text-cyan-800">
 				{ctaLabel}
