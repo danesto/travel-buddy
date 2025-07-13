@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import CollapsibleSection from '$lib/components/collapsible-section.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import type { PageProps } from './$types.js';
+
+	const { data }: PageProps = $props();
 
 	// Hardcoded trip data - in real app this would come from a database
 	const tripData = {
@@ -205,6 +209,17 @@ Santorini exceeded all expectations - it's a place that captures your heart and 
 </svelte:head>
 
 <div class="min-h-screen bg-gray-50">
+	{#await data.trip}
+		<Skeleton class="h-80 w-full" />
+	{:then trip}
+		{#if trip}
+			<div>
+				{trip.title}
+			</div>
+		{/if}
+	{:catch error}
+		<p>error loading trip: {error.message}</p>
+	{/await}
 	<!-- Header Image -->
 	<div
 		class="relative h-80 w-full bg-cover bg-center bg-no-repeat"
