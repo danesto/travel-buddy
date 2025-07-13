@@ -1,37 +1,13 @@
 <script lang="ts">
 	import DestinationCard from '$lib/components/destination-card.svelte';
+	import { getFlagEmoji } from '$lib/utils.js';
 
 	import type { PageProps } from './$types.js';
 
 	const { data }: PageProps = $props();
 
 	const trips = data?.trips;
-	console.log('trips', trips);
 
-	// const trips = [
-	// 	{
-	// 		title: 'Copenhagen City Trip',
-	// 		description: 'Discover the beautiful city of Copenhagen, Denmark',
-	// 		emoji: '🇩🇰',
-	// 		gradientFrom: '#06B6D4',
-	// 		gradientTo: '#06B6D4'
-	// 	},
-	// 	{
-	// 		title: 'Berlin City Trip',
-	// 		description: 'Discover the beautiful city of Berlin, Germany',
-	// 		emoji: '🇩🇪',
-	// 		gradientFrom: '#06B6D4',
-	// 		gradientTo: '#06B6D4'
-	// 	},
-	// 	{
-	// 		title: 'New Trip?',
-	// 		description: 'Click to start planning your next trip or to add previous ones!',
-	// 		emoji: '+ 🚀❔',
-	// 		gradientFrom: '#008000',
-	// 		gradientTo: '#008000',
-	// 		ctaText: 'Create New Trip'
-	// 	}
-	// ];
 </script>
 
 <div class="max-w-7xl px-4">
@@ -42,7 +18,7 @@
 
 	<div class="grid grid-cols-1 gap-8 md:grid-cols-4">
 		{#each trips as trip}
-			<DestinationCard {...trip} />
+			<DestinationCard {...trip} emoji={getFlagEmoji(trip.destinationCountryCode)} />
 		{/each}
 	</div>
 
