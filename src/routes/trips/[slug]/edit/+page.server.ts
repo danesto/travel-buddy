@@ -21,18 +21,20 @@ export const actions: Actions = {
 		const { slug } = params;
 		const data = await request.formData();
 
+		console.log('edit trip', data);
+
 		const updatedTrip = await db
 			.update(trips)
 			.set({
-				title: data.get('title')?.toString() || '',
-				destination: data.get('destination')?.toString() || '',
-				summary: data.get('summary')?.toString() || '',
-				headerImage: data.get('headerImage')?.toString() || null,
-				destinationCountryCode: data.get('destinationCountryCode')?.toString() || 'SR',
-				startDate: data.get('startDate') ? new Date(data.get('startDate') as string) : null,
-				endDate: data.get('endDate') ? new Date(data.get('endDate') as string) : null,
-				gradientFrom: data.get('gradientFrom')?.toString() || '#008000',
-				gradientTo: data.get('gradientTo')?.toString() || '#008000',
+				title: data.get('title')?.toString(),
+				destination: data.get('destination')?.toString(),
+				summary: data.get('summary')?.toString(),
+				headerImage: data.get('headerImage')?.toString(),
+				destinationCountryCode: data.get('destinationCountryCode')?.toString(),
+				startDate: new Date(data.get('startDate') as string),
+				endDate: new Date(data.get('endDate') as string),
+				gradientFrom: data.get('gradientFrom')?.toString(),
+				gradientTo: data.get('gradientTo')?.toString(),
 				updatedAt: new Date()
 			})
 			.where(eq(trips.slug, slug))

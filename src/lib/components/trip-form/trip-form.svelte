@@ -186,7 +186,14 @@
 	}
 </script>
 
-<form method="POST" use:enhance>
+<form
+	method="POST"
+	use:enhance={() => {
+		return async ({ update }) => {
+			update({ reset: false });
+		};
+	}}
+>
 	<div
 		class="mb-8 rounded-2xl {mode === 'edit' ? 'border border-orange-500' : ''} bg-white shadow-xl"
 	>

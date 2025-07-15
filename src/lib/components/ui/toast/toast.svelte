@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import X from '@lucide/svelte/icons/x';
 	import CheckCircle from '@lucide/svelte/icons/check-circle';
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
