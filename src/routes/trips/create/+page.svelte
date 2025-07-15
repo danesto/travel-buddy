@@ -1,6 +1,5 @@
-<script>
-	import TripForm from '$lib/components/trip-form.svelte';
-	import { enhance } from '$app/forms';
+<script lang="ts">
+	import TripForm from '$lib/components/trip-form/trip-form.svelte';
 </script>
 
 <svelte:head>
@@ -20,8 +19,6 @@
 
 	<!-- Main Content -->
 	<div class="relative z-10 mx-auto -mt-16 max-w-6xl px-4">
-		<form method="POST" use:enhance>
-			<TripForm mode="create" />
-		</form>
+		<TripForm mode="create" />
 	</div>
 </div>

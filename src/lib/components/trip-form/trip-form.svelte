@@ -20,39 +20,51 @@
 	import Building from '@lucide/svelte/icons/building';
 	import Plane from '@lucide/svelte/icons/plane';
 
-	// Props for default values (useful for editing)
-	// Merge all props into a single $props() destructure
-	let {
-		defaultValues = {
-			title: '',
-			location: '',
-			dates: '',
-			summary: '',
-			headerImage: '',
-			itinerary: [],
-			expenses: [],
-			accommodations: [],
-			transportation: []
-		},
-		mode = 'edit'
-	} = $props();
+	import type {
+		FormItineraryItem,
+		FormExpense,
+		FormAccommodation,
+		FormTransportation,
+		FormTripData,
+		FormProps
+	} from './trip-form.types.js';
 
-	// Form state
-	let tripData = { ...defaultValues };
+	// Props for default values (useful for editing)
+	let { defaultValues = {}, mode = 'create' }: FormProps = $props();
+
+	// Form state with proper defaults
+	let tripData: FormTripData = {
+		slug: '',
+		title: '',
+		destination: '',
+		summary: '',
+		headerImage: null,
+		destinationCountryCode: 'SR',
+		startDate: null,
+		gradientFrom: '#008000',
+		gradientTo: '#008000',
+		endDate: null,
+		itinerary: [],
+		expenses: [],
+		accommodations: [],
+		transportation: [],
+		...defaultValues
+	};
+
 	let activeTab = $state('basic');
 
 	// Dynamic arrays for form sections
-	let itineraryItems =
+	let itineraryFormItems: FormItineraryItem[] =
 		tripData.itinerary.length > 0
 			? tripData.itinerary
 			: [{ day: '', date: '', location: '', activities: [''], highlights: '' }];
 
-	let expenseItems =
+	let expenseFormItems: FormExpense[] =
 		tripData.expenses.length > 0
 			? tripData.expenses
 			: [{ category: '', description: '', amount: '', currency: 'EUR' }];
 
-	let accommodationItems =
+	let accommodationFormItems: FormAccommodation[] =
 		tripData.accommodations.length > 0
 			? tripData.accommodations
 			: [
@@ -69,7 +81,7 @@
 					}
 				];
 
-	let transportationItems =
+	let transportationFormItems: FormTransportation[] =
 		tripData.transportation.length > 0
 			? tripData.transportation
 			: [
@@ -78,40 +90,40 @@
 
 	// Helper functions
 	function addItineraryItem() {
-		itineraryItems = [
-			...itineraryItems,
+		itineraryFormItems = [
+			...itineraryFormItems,
 			{ day: '', date: '', location: '', activities: [''], highlights: '' }
 		];
 	}
 
 	function removeItineraryItem(index: number) {
-		itineraryItems = itineraryItems.filter((_: any, i: number) => i !== index);
+		itineraryFormItems = itineraryFormItems.filter((_: any, i: number) => i !== index);
 	}
 
 	function addActivity(dayIndex: number) {
-		itineraryItems[dayIndex].activities = [...itineraryItems[dayIndex].activities, ''];
+		itineraryFormItems[dayIndex].activities = [...itineraryFormItems[dayIndex].activities, ''];
 	}
 
 	function removeActivity(dayIndex: number, activityIndex: number) {
-		itineraryItems[dayIndex].activities = itineraryItems[dayIndex].activities.filter(
+		itineraryFormItems[dayIndex].activities = itineraryFormItems[dayIndex].activities.filter(
 			(_: any, i: number) => i !== activityIndex
 		);
 	}
 
 	function addExpenseItem() {
-		expenseItems = [
-			...expenseItems,
+		expenseFormItems = [
+			...expenseFormItems,
 			{ category: '', description: '', amount: '', currency: 'EUR' }
 		];
 	}
 
 	function removeExpenseItem(index: number) {
-		expenseItems = expenseItems.filter((_: any, i: number) => i !== index);
+		expenseFormItems = expenseFormItems.filter((_: any, i: number) => i !== index);
 	}
 
 	function addAccommodationItem() {
-		accommodationItems = [
-			...accommodationItems,
+		accommodationFormItems = [
+			...accommodationFormItems,
 			{
 				name: '',
 				type: '',
@@ -127,49 +139,35 @@
 	}
 
 	function removeAccommodationItem(index: number) {
-		accommodationItems = accommodationItems.filter((_: any, i: number) => i !== index);
+		accommodationFormItems = accommodationFormItems.filter((_: any, i: number) => i !== index);
 	}
 
 	function addAmenity(hotelIndex: number) {
-		accommodationItems[hotelIndex].amenities = [...accommodationItems[hotelIndex].amenities, ''];
+		accommodationFormItems[hotelIndex].amenities = [
+			...accommodationFormItems[hotelIndex].amenities,
+			''
+		];
 	}
 
 	function removeAmenity(hotelIndex: number, amenityIndex: number) {
-		accommodationItems[hotelIndex].amenities = accommodationItems[hotelIndex].amenities.filter(
-			(_: any, i: number) => i !== amenityIndex
-		);
+		accommodationFormItems[hotelIndex].amenities = accommodationFormItems[
+			hotelIndex
+		].amenities.filter((_: any, i: number) => i !== amenityIndex);
 	}
 
 	function addTransportationItem() {
-		transportationItems = [
-			...transportationItems,
+		transportationFormItems = [
+			...transportationFormItems,
 			{ type: 'Flight', route: '', date: '', time: '', provider: '', cost: '', currency: 'EUR' }
 		];
 	}
 
 	function removeTransportationItem(index: number) {
-		transportationItems = transportationItems.filter((_: any, i: number) => i !== index);
-	}
-
-	// pass this as the prop, since we need to handle the form submission differently for create and edit
-	function handleSubmit(e: Event) {
-		e?.preventDefault();
-		// Prepare the complete trip data
-		const completeTrip = {
-			...tripData,
-			itinerary: itineraryItems,
-			expenses: expenseItems,
-			accommodations: accommodationItems,
-			transportation: transportationItems
-		};
-
-		console.log('Trip data to submit:', completeTrip);
-		return null;
-		// TODO: Handle form submission
+		transportationFormItems = transportationFormItems.filter((_: any, i: number) => i !== index);
 	}
 </script>
 
-<form on:submit|preventDefault={mode === 'create' ? handleSubmit : undefined}>
+<form method="POST">
 	<div class="mb-8 rounded-2xl bg-white shadow-xl">
 		<div class="p-8">
 			<div class="mb-8 flex items-center justify-between">
@@ -178,11 +176,16 @@
 					<p class="text-gray-600">Fill in the details for your upcoming adventure</p>
 				</div>
 				{#if mode === 'create'}
-					<Button type="submit" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700">
+					<Button
+						type="submit"
+						class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+					>
 						Create Trip
 					</Button>
 				{:else}
-					<Button onclick={handleSubmit} class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700">
+					<Button
+						class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+					>
 						Save Trip
 					</Button>
 				{/if}
@@ -194,19 +197,35 @@
 						<MapPin class="h-4 w-4" />
 						Basic Info
 					</TabsTrigger>
-					<TabsTrigger value="itinerary" class="flex items-center gap-2" disabled={mode === 'create'}>
+					<TabsTrigger
+						value="itinerary"
+						class="flex items-center gap-2"
+						disabled={mode === 'create'}
+					>
 						<Calendar class="h-4 w-4" />
 						Itinerary
 					</TabsTrigger>
-					<TabsTrigger value="expenses" class="flex items-center gap-2" disabled={mode === 'create'}>
+					<TabsTrigger
+						value="expenses"
+						class="flex items-center gap-2"
+						disabled={mode === 'create'}
+					>
 						<DollarSign class="h-4 w-4" />
 						Expenses
 					</TabsTrigger>
-					<TabsTrigger value="accommodations" class="flex items-center gap-2" disabled={mode === 'create'}>
+					<TabsTrigger
+						value="accommodations"
+						class="flex items-center gap-2"
+						disabled={mode === 'create'}
+					>
 						<Building class="h-4 w-4" />
 						Hotels
 					</TabsTrigger>
-					<TabsTrigger value="transportation" class="flex items-center gap-2" disabled={mode === 'create'}>
+					<TabsTrigger
+						value="transportation"
+						class="flex items-center gap-2"
+						disabled={mode === 'create'}
+					>
 						<Plane class="h-4 w-4" />
 						Transport
 					</TabsTrigger>
@@ -223,24 +242,58 @@
 							<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<div class="space-y-2">
 									<Label for="title">Trip Title</Label>
-									<Input id="title" name="title" bind:value={tripData.title} placeholder="Amazing Journey to..." required={mode === 'create'} />
+									<Input
+										id="title"
+										name="title"
+										bind:value={tripData.title}
+										placeholder="Amazing Journey to..."
+										required={mode === 'create'}
+									/>
 								</div>
 								<div class="space-y-2">
-									<Label for="location">Location</Label>
-									<Input id="location" name="location" bind:value={tripData.location} placeholder="Santorini, Greece" required={mode === 'create'} />
+									<Label for="destination">Destination</Label>
+									<Input
+										id="destination"
+										name="destination"
+										bind:value={tripData.destination}
+										placeholder="Santorini, Greece"
+										required={mode === 'create'}
+									/>
 								</div>
 							</div>
-							<div class="space-y-2">
-								<Label for="dates">Trip Dates</Label>
-								<Input id="dates" name="dates" bind:value={tripData.dates} placeholder="June 15-22, 2024" required={mode === 'create'} />
+							<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div class="space-y-2">
+									<Label for="startDate">Start Date</Label>
+									<Input
+										id="startDate"
+										name="startDate"
+										type="date"
+										bind:value={tripData.startDate}
+									/>
+								</div>
+								<div class="space-y-2">
+									<Label for="endDate">End Date</Label>
+									<Input id="endDate" name="endDate" type="date" bind:value={tripData.endDate} />
+								</div>
 							</div>
 							<div class="space-y-2">
 								<Label for="headerImage">Header Image URL</Label>
-								<Input id="headerImage" name="headerImage" bind:value={tripData.headerImage} placeholder="https://..." />
+								<Input
+									id="headerImage"
+									name="headerImage"
+									bind:value={tripData.headerImage}
+									placeholder="https://..."
+								/>
 							</div>
 							<div class="space-y-2">
 								<Label for="summary">Trip Summary</Label>
-								<Textarea id="summary" name="summary" bind:value={tripData.summary} placeholder="Brief description of your trip..." rows={3} />
+								<Textarea
+									id="summary"
+									name="summary"
+									bind:value={tripData.summary}
+									placeholder="Brief description of your trip..."
+									rows={3}
+								/>
 							</div>
 						</CardContent>
 					</Card>
@@ -260,11 +313,11 @@
 							</Button>
 						</div>
 
-						{#each itineraryItems as item, index}
+						{#each itineraryFormItems as item, index}
 							<Card>
 								<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle class="text-base">Day {index + 1}</CardTitle>
-									{#if itineraryItems.length > 1}
+									{#if itineraryFormItems.length > 1}
 										<Button variant="outline" size="sm" onclick={() => removeItineraryItem(index)}>
 											<Trash2 class="h-4 w-4" />
 										</Button>
@@ -326,6 +379,7 @@
 							</Card>
 						{/each}
 					</TabsContent>
+
 					<!-- Expenses Tab -->
 					<TabsContent value="expenses" class="space-y-6">
 						<div class="flex items-center justify-between">
@@ -339,7 +393,7 @@
 							</Button>
 						</div>
 
-						{#each expenseItems as expense, index}
+						{#each expenseFormItems as expense, index}
 							<Card>
 								<CardContent class="pt-6">
 									<div class="flex items-start gap-4">
@@ -350,7 +404,10 @@
 											</div>
 											<div class="space-y-2">
 												<Label>Description</Label>
-												<Input bind:value={expense.description} placeholder="Hotel stay (7 nights)" />
+												<Input
+													bind:value={expense.description}
+													placeholder="Hotel stay (7 nights)"
+												/>
 											</div>
 											<div class="space-y-2">
 												<Label>Amount</Label>
@@ -361,7 +418,7 @@
 												<Input bind:value={expense.currency} placeholder="EUR" />
 											</div>
 										</div>
-										{#if expenseItems.length > 1}
+										{#if expenseFormItems.length > 1}
 											<Button
 												variant="outline"
 												size="sm"
@@ -376,6 +433,7 @@
 							</Card>
 						{/each}
 					</TabsContent>
+
 					<!-- Accommodations Tab -->
 					<TabsContent value="accommodations" class="space-y-6">
 						<div class="flex items-center justify-between">
@@ -389,12 +447,16 @@
 							</Button>
 						</div>
 
-						{#each accommodationItems as hotel, index}
+						{#each accommodationFormItems as hotel, index}
 							<Card>
 								<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle class="text-base">Accommodation {index + 1}</CardTitle>
-									{#if accommodationItems.length > 1}
-										<Button variant="outline" size="sm" onclick={() => removeAccommodationItem(index)}>
+									{#if accommodationFormItems.length > 1}
+										<Button
+											variant="outline"
+											size="sm"
+											onclick={() => removeAccommodationItem(index)}
+										>
 											<Trash2 class="h-4 w-4" />
 										</Button>
 									{/if}
@@ -419,11 +481,11 @@
 										</div>
 										<div class="space-y-2">
 											<Label>Check-in Date</Label>
-											<Input bind:value={hotel.checkIn} placeholder="June 15, 2024" />
+											<Input bind:value={hotel.checkIn} type="date" />
 										</div>
 										<div class="space-y-2">
 											<Label>Check-out Date</Label>
-											<Input bind:value={hotel.checkOut} placeholder="June 22, 2024" />
+											<Input bind:value={hotel.checkOut} type="date" />
 										</div>
 										<div class="space-y-2">
 											<Label>Total Cost</Label>
@@ -466,6 +528,7 @@
 							</Card>
 						{/each}
 					</TabsContent>
+
 					<!-- Transportation Tab -->
 					<TabsContent value="transportation" class="space-y-6">
 						<div class="flex items-center justify-between">
@@ -479,12 +542,16 @@
 							</Button>
 						</div>
 
-						{#each transportationItems as transport, index}
+						{#each transportationFormItems as transport, index}
 							<Card>
 								<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
 									<CardTitle class="text-base">Transport {index + 1}</CardTitle>
-									{#if transportationItems.length > 1}
-										<Button variant="outline" size="sm" onclick={() => removeTransportationItem(index)}>
+									{#if transportationFormItems.length > 1}
+										<Button
+											variant="outline"
+											size="sm"
+											onclick={() => removeTransportationItem(index)}
+										>
 											<Trash2 class="h-4 w-4" />
 										</Button>
 									{/if}
@@ -533,7 +600,7 @@
 
 										<div class="space-y-2">
 											<Label>Date</Label>
-											<Input bind:value={transport.date} placeholder="June 15, 2024" />
+											<Input bind:value={transport.date} type="date" />
 										</div>
 										<div class="space-y-2">
 											<Label>Cost</Label>
