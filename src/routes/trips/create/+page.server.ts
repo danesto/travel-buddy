@@ -21,7 +21,6 @@ export const actions = {
 			.returning()
 			.get();
 
-		redirect(303, `/trips/${trip.slug}/edit`);
-		// return { success: true };
+		redirect(303, `/trips/${trip.slug}/edit?created=true`);
 	}
 } satisfies Actions;

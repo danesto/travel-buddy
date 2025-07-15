@@ -19,7 +19,11 @@
 	import DollarSign from '@lucide/svelte/icons/dollar-sign';
 	import Building from '@lucide/svelte/icons/building';
 	import Plane from '@lucide/svelte/icons/plane';
+	import Save from '@lucide/svelte/icons/save';
+	import AlertCircle from '@lucide/svelte/icons/alert-circle';
 
+	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
 	import type {
 		FormItineraryItem,
 		FormExpense,
@@ -29,7 +33,7 @@
 		FormProps
 	} from './trip-form.types.js';
 
-	// Props for default values (useful for editing)
+	// Props
 	let { defaultValues = {}, mode = 'create' }: FormProps = $props();
 
 	// Form state with proper defaults
@@ -52,6 +56,19 @@
 	};
 
 	let activeTab = $state('basic');
+	let originalData = $state<string>('');
+	let isFormDirty = $state(false);
+
+	// Initialize original data on mount
+	onMount(() => {
+		originalData = JSON.stringify(tripData);
+	});
+
+	// Watch for changes to determine if form is dirty
+	$effect(() => {
+		const currentData = JSON.stringify(tripData);
+		isFormDirty = currentData !== originalData;
+	});
 
 	// Dynamic arrays for form sections
 	let itineraryFormItems: FormItineraryItem[] = $state(
@@ -169,39 +186,61 @@
 	}
 </script>
 
-<form method="POST">
-	<div class="mb-8 rounded-2xl bg-white shadow-xl">
+<form method="POST" use:enhance>
+	<div
+		class="mb-8 rounded-2xl {mode === 'edit' ? 'border border-orange-500' : ''} bg-white shadow-xl"
+	>
 		<div class="p-8">
 			<div class="mb-8 flex items-center justify-between">
 				<div>
 					<h2 class="mb-2 text-3xl font-bold text-gray-800">Trip Planning Form</h2>
 					<p class="text-gray-600">Fill in the details for your upcoming adventure</p>
+
+					{#if mode === 'edit'}
+						{#if isFormDirty}
+							<div class="mt-2 flex items-center gap-2 text-sm text-amber-600">
+								<AlertCircle class="h-4 w-4" />
+								<span>Unsaved changes</span>
+							</div>
+						{/if}
+					{/if}
 				</div>
-				{#if mode === 'create'}
-					<Button
-						type="submit"
-						class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
-					>
-						Create Trip
-					</Button>
-				{:else}
-					<Button
-						class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
-					>
-						Save Trip
-					</Button>
-				{/if}
+
+				<div class="flex items-center gap-4">
+					{#if mode === 'create'}
+						<Button
+							type="submit"
+							class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+						>
+							<Save class="mr-2 h-4 w-4" />
+							Create Trip
+						</Button>
+					{:else}
+						<Button
+							type="submit"
+							class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+						>
+							{#if isFormDirty}
+								<AlertCircle class="mr-2 h-4 w-4" />
+								Save Trip
+							{:else}
+								<Save class="mr-2 h-4 w-4" />
+								Save Trip
+							{/if}
+						</Button>
+					{/if}
+				</div>
 			</div>
 
 			<Tabs bind:value={activeTab} class="w-full">
 				<TabsList class="mb-8 grid w-full grid-cols-5">
-					<TabsTrigger value="basic" class="flex items-center gap-2">
+					<TabsTrigger value="basic" class="flex cursor-pointer items-center gap-2">
 						<MapPin class="h-4 w-4" />
 						Basic Info
 					</TabsTrigger>
 					<TabsTrigger
 						value="itinerary"
-						class="flex items-center gap-2"
+						class="flex cursor-pointer items-center gap-2"
 						disabled={mode === 'create'}
 					>
 						<Calendar class="h-4 w-4" />
@@ -209,7 +248,7 @@
 					</TabsTrigger>
 					<TabsTrigger
 						value="expenses"
-						class="flex items-center gap-2"
+						class="flex cursor-pointer items-center gap-2"
 						disabled={mode === 'create'}
 					>
 						<DollarSign class="h-4 w-4" />
@@ -217,7 +256,7 @@
 					</TabsTrigger>
 					<TabsTrigger
 						value="accommodations"
-						class="flex items-center gap-2"
+						class="flex cursor-pointer items-center gap-2"
 						disabled={mode === 'create'}
 					>
 						<Building class="h-4 w-4" />
@@ -225,7 +264,7 @@
 					</TabsTrigger>
 					<TabsTrigger
 						value="transportation"
-						class="flex items-center gap-2"
+						class="flex cursor-pointer items-center gap-2"
 						disabled={mode === 'create'}
 					>
 						<Plane class="h-4 w-4" />
@@ -297,6 +336,15 @@
 									rows={3}
 								/>
 							</div>
+
+							<!-- Hidden fields for additional trip data -->
+							<input
+								type="hidden"
+								name="destinationCountryCode"
+								bind:value={tripData.destinationCountryCode}
+							/>
+							<input type="hidden" name="gradientFrom" bind:value={tripData.gradientFrom} />
+							<input type="hidden" name="gradientTo" bind:value={tripData.gradientTo} />
 						</CardContent>
 					</Card>
 				</TabsContent>
