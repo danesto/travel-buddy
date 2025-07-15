@@ -8,14 +8,20 @@ export const actions = {
 		const data = await request.formData();
 		console.log('createTrip', data);
 
-		db.insert(trips).values({
-			slug: data.get('title')?.toString().toLowerCase().replace(/\s+/g, '-') || '',
-			title: data.get('title')?.toString() || '',
-			destination: data.get('destination')?.toString() || '',
-			summary: data.get('summary')?.toString() || ''
-		});
+		const slug = data.get('title')?.toString().toLowerCase().replace(/\s+/g, '-') || '';
 
-		redirect(303, '/trips/');
+		const trip = await db
+			.insert(trips)
+			.values({
+				slug: slug,
+				title: data.get('title')?.toString() || '',
+				destination: data.get('destination')?.toString() || '',
+				summary: data.get('summary')?.toString() || ''
+			})
+			.returning()
+			.get();
+
+		redirect(303, `/trips/${trip.slug}/edit`);
 		// return { success: true };
 	}
 } satisfies Actions;

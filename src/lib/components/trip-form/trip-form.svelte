@@ -54,17 +54,19 @@
 	let activeTab = $state('basic');
 
 	// Dynamic arrays for form sections
-	let itineraryFormItems: FormItineraryItem[] =
+	let itineraryFormItems: FormItineraryItem[] = $state(
 		tripData.itinerary.length > 0
 			? tripData.itinerary
-			: [{ day: '', date: '', location: '', activities: [''], highlights: '' }];
+			: [{ day: '', date: '', location: '', activities: [''], highlights: '' }]
+	);
 
-	let expenseFormItems: FormExpense[] =
+	let expenseFormItems: FormExpense[] = $state(
 		tripData.expenses.length > 0
 			? tripData.expenses
-			: [{ category: '', description: '', amount: '', currency: 'EUR' }];
+			: [{ category: '', description: '', amount: '', currency: 'EUR' }]
+	);
 
-	let accommodationFormItems: FormAccommodation[] =
+	let accommodationFormItems: FormAccommodation[] = $state(
 		tripData.accommodations.length > 0
 			? tripData.accommodations
 			: [
@@ -79,14 +81,14 @@
 						totalCost: '',
 						currency: 'EUR'
 					}
-				];
+				]
+	);
 
-	let transportationFormItems: FormTransportation[] =
+	let transportationFormItems: FormTransportation[] = $state(
 		tripData.transportation.length > 0
 			? tripData.transportation
-			: [
-					{ type: 'Flight', route: '', date: '', time: '', provider: '', cost: '', currency: 'EUR' }
-				];
+			: [{ type: 'Flight', route: '', date: '', time: '', provider: '', cost: '', currency: 'EUR' }]
+	);
 
 	// Helper functions
 	function addItineraryItem() {
