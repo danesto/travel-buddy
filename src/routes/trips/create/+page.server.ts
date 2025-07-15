@@ -21,6 +21,6 @@ export const actions = {
 			.returning()
 			.get();
 
-		redirect(303, `/trips/${trip.slug}/edit?created=true`);
+		redirect(303, `/trips/${trip.slug}/edit?toast=success&message=Trip created successfully`);
 	}
 } satisfies Actions;

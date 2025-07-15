@@ -195,7 +195,9 @@
 	}}
 >
 	<div
-		class="mb-8 rounded-2xl {mode === 'edit' ? 'border border-orange-500' : ''} bg-white shadow-xl"
+		class="mb-8 rounded-2xl {mode === 'edit'
+			? 'border border-orange-500'
+			: 'border border-black'} bg-white shadow-sm"
 	>
 		<div class="p-8">
 			<div class="mb-8 flex items-center justify-between">

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.css';
 	import hero from '$lib/assets/header.jpg';
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
+	import { toast } from 'svelte-sonner';
 
 	import { page } from '$app/stores';
 
@@ -9,6 +11,28 @@
 	let currentPage = $derived($page.url.pathname);
 
 	const isHomePage = $derived(currentPage === '/');
+
+	$effect(() => {
+		const toastType = $page.url.searchParams.get('toast');
+		const message = $page.url.searchParams.get('message');
+
+		if (toastType && message) {
+			switch (toastType) {
+				case 'success':
+					toast.success(message, { position: 'top-center' });
+					break;
+				case 'error':
+					toast.error(message, { position: 'top-center' });
+					break;
+				case 'info':
+					toast.info(message, { position: 'top-center' });
+					break;
+				case 'warning':
+					toast.warning(message, { position: 'top-center' });
+					break;
+			}
+		}
+	});
 </script>
 
 <!-- Hero Header with Background -->
@@ -114,6 +138,7 @@
 </header>
 
 <!-- Main Content -->
-<main class="relative z-10 mx-auto mt-10 max-w-7xl bg-gray-50">
+<main class="relative z-10 mx-auto mt-10 max-w-7xl bg-[#fdf7f2]">
+	<Toaster />
 	{@render children()}
 </main>

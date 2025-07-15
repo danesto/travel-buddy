@@ -6,7 +6,7 @@
 	<title>Create New Trip</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen">
 	<!-- Header -->
 	<div class="relative h-60 w-full bg-gradient-to-br from-blue-600 to-cyan-600">
 		<div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
