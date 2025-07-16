@@ -1,5 +1,6 @@
 <script lang="ts">
 	import TripForm from '$lib/components/trip-form/trip-form.svelte';
+	import { getFlagEmoji } from '$lib/utils.js';
 	import type { PageData } from './$types.js';
 
 	const { data }: { data: PageData } = $props();
@@ -16,10 +17,12 @@
 		accommodations: [],
 		transportation: []
 	});
+
+	console.log(trip);
 </script>
 
 <svelte:head>
-	<title>Edit {trip?.title}</title>
+	<title>{trip?.title}</title>
 </svelte:head>
 
 <div class="min-h-screen">
@@ -27,7 +30,8 @@
 	<div class="relative h-60 w-full bg-gradient-to-br from-blue-600 to-cyan-600">
 		<div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
 			<h1 class="mb-2 font-serif text-4xl font-bold text-white md:text-5xl">
-				🌴 Edit {trip?.title}
+				{getFlagEmoji(trip?.destinationCountryCode)}
+				{trip?.title}
 			</h1>
 			<p class="max-w-2xl text-center text-lg text-white opacity-90">
 				{trip?.destination}

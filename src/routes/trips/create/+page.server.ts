@@ -16,7 +16,11 @@ export const actions = {
 				slug: slug,
 				title: data.get('title')?.toString() || '',
 				destination: data.get('destination')?.toString() || '',
-				summary: data.get('summary')?.toString() || ''
+				destinationCountryCode: data.get('destinationCountryCode')?.toString() || '',
+				summary: data.get('summary')?.toString() || '',
+				headerImage: data.get('headerImage')?.toString() || '',
+				gradientFrom: data.get('gradientFrom')?.toString() || '',
+				gradientTo: data.get('gradientTo')?.toString() || ''
 			})
 			.returning()
 			.get();

@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { countries, getFlagEmoji } from '$lib/utils.js';
 	import {
 		Card,
 		CardContent,
@@ -44,7 +45,7 @@
 		destination: '',
 		summary: '',
 		headerImage: null,
-		destinationCountryCode: 'SR',
+		destinationCountryCode: 'RS',
 		startDate: null,
 		gradientFrom: '#008000',
 		gradientTo: '#008000',
@@ -312,15 +313,32 @@
 									/>
 								</div>
 								<div class="space-y-2">
-									<Label for="destination">Destination</Label>
+									<Label for="destination">City/Destination</Label>
 									<Input
 										id="destination"
 										name="destination"
 										bind:value={tripData.destination}
-										placeholder="Santorini, Greece"
+										placeholder="Santorini"
 										required={mode === 'create'}
 									/>
 								</div>
+							</div>
+							<div class="space-y-2">
+								<Label for="destinationCountryCode">Country</Label>
+								<select
+									id="destinationCountryCode"
+									name="destinationCountryCode"
+									bind:value={tripData.destinationCountryCode}
+									required={mode === 'create'}
+									class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+								>
+									{#each countries as country}
+										<option value={country.code}>
+											{getFlagEmoji(country.code)}
+											{country.name}
+										</option>
+									{/each}
+								</select>
 							</div>
 							<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<div class="space-y-2">
@@ -358,11 +376,6 @@
 							</div>
 
 							<!-- Hidden fields for additional trip data -->
-							<input
-								type="hidden"
-								name="destinationCountryCode"
-								bind:value={tripData.destinationCountryCode}
-							/>
 							<input type="hidden" name="gradientFrom" bind:value={tripData.gradientFrom} />
 							<input type="hidden" name="gradientTo" bind:value={tripData.gradientTo} />
 						</CardContent>
