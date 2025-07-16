@@ -4,10 +4,10 @@
 
 	const { data }: { data: PageData } = $props();
 
-	const { trip } = data;
+	const trip = $derived(data.trip);
 
 	// Convert database dates to form-friendly format
-	const formData = {
+	const formData = $derived({
 		...trip,
 		startDate: trip.startDate ? new Date(trip.startDate) : null,
 		endDate: trip.endDate ? new Date(trip.endDate) : null,
@@ -15,11 +15,7 @@
 		expenses: [],
 		accommodations: [],
 		transportation: []
-	};
-
-	const updatedTitle = $state(trip?.title);
-
-	console.log('updatedTitle', updatedTitle);
+	});
 </script>
 
 <svelte:head>

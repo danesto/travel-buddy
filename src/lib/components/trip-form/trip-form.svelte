@@ -33,8 +33,6 @@
 		FormProps
 	} from './trip-form.types.js';
 	import { toast } from 'svelte-sonner';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
 
 	// Props
 	let { defaultValues = {}, mode = 'create' }: FormProps = $props();
