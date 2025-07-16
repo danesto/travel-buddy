@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	let { children } = $props();
 
@@ -31,17 +32,22 @@
 					toast.warning(message, { position: 'top-center' });
 					break;
 			}
+
+			const newUrl = new URL($page.url);
+
+			newUrl.searchParams.delete('toast');
+			newUrl.searchParams.delete('message');
+
+			goto(newUrl.toString(), { replaceState: true });
 		}
 	});
 </script>
 
-<!-- Hero Header with Background -->
 <header
 	class="relative flex w-full flex-col gap-30 bg-cover bg-center bg-no-repeat
 	{isHomePage ? 'bg-transparent pt-10 pb-20' : 'bg-gradient-to-r from-blue-900 to-blue-800 pt-10'}
 "
 >
-	<!-- Navigation Bar -->
 	<nav class="bg-opacity-95 relative z-20 w-full {isHomePage && 'shadow-sm'} bg-transparent">
 		<div
 			class="mx-auto max-w-7xl rounded-full px-4 text-white {isHomePage &&

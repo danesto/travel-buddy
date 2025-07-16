@@ -17,8 +17,9 @@
 		transportation: []
 	};
 
-	console.log('Trip data:', trip);
-	console.log('Form data:', formData);
+	const updatedTitle = $state(trip?.title);
+
+	console.log('updatedTitle', updatedTitle);
 </script>
 
 <svelte:head>

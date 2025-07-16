@@ -32,6 +32,9 @@
 		FormTripData,
 		FormProps
 	} from './trip-form.types.js';
+	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 
 	// Props
 	let { defaultValues = {}, mode = 'create' }: FormProps = $props();
@@ -189,8 +192,18 @@
 <form
 	method="POST"
 	use:enhance={() => {
-		return async ({ update }) => {
-			update({ reset: false });
+		return async ({ update, result }) => {
+			console.log('Form result:', result);
+			if (mode === 'edit') {
+				if (result.type === 'success') {
+					await update({ reset: false, invalidateAll: true });
+					toast.success('Trip data saved successfully', { position: 'top-center' });
+				} else {
+					toast.error('Failed to save trip data', { position: 'top-center' });
+				}
+			} else {
+				await update({ reset: false, invalidateAll: true });
+			}
 		};
 	}}
 >
