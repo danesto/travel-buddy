@@ -18,7 +18,7 @@
 		transportation: []
 	});
 
-	console.log(trip);
+	console.log('trip', trip);
 </script>
 
 <svelte:head>
@@ -27,7 +27,7 @@
 
 <div class="min-h-screen">
 	<!-- Header -->
-	<div class="relative h-60 w-full bg-gradient-to-br from-blue-600 to-cyan-600">
+	<div class="relative h-60 w-full" style="background-color: {trip?.accentColor}">
 		<div class="relative z-10 flex h-full flex-col items-center justify-center px-4">
 			<h1 class="mb-2 font-serif text-4xl font-bold text-white md:text-5xl">
 				{getFlagEmoji(trip?.destinationCountryCode)}

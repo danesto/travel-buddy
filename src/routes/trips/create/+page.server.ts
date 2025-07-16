@@ -19,8 +19,7 @@ export const actions = {
 				destinationCountryCode: data.get('destinationCountryCode')?.toString() || '',
 				summary: data.get('summary')?.toString() || '',
 				headerImage: data.get('headerImage')?.toString() || '',
-				gradientFrom: data.get('gradientFrom')?.toString() || '',
-				gradientTo: data.get('gradientTo')?.toString() || ''
+				accentColor: data.get('accentColor')?.toString() || ''
 			})
 			.returning()
 			.get();

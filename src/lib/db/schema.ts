@@ -10,8 +10,7 @@ export const trips = sqliteTable('trips', {
 	headerImage: text('header_image'),
 	destinationCountryCode: text('destination_country_code').notNull().default('SR'),
 	startDate: integer('start_date', { mode: 'timestamp' }),
-	gradientFrom: text('gradient_from').notNull().default('#008000'),
-	gradientTo: text('gradient_to').notNull().default('#008000'),
+	accentColor: text('accent_color').notNull().default('#008000'),
 	endDate: integer('end_date', { mode: 'timestamp' }),
 	createdAt: integer('created_at', { mode: 'timestamp' })
 		.notNull()

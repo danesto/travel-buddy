@@ -33,8 +33,7 @@ export const actions: Actions = {
 				destinationCountryCode: data.get('destinationCountryCode')?.toString(),
 				startDate: new Date(data.get('startDate') as string),
 				endDate: new Date(data.get('endDate') as string),
-				gradientFrom: data.get('gradientFrom')?.toString(),
-				gradientTo: data.get('gradientTo')?.toString(),
+				accentColor: data.get('accentColor')?.toString(),
 				updatedAt: new Date()
 			})
 			.where(eq(trips.slug, slug))

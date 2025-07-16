@@ -47,8 +47,7 @@
 		headerImage: null,
 		destinationCountryCode: 'RS',
 		startDate: null,
-		gradientFrom: '#008000',
-		gradientTo: '#008000',
+		accentColor: '#008000',
 		endDate: null,
 		itinerary: [],
 		expenses: [],
@@ -376,8 +375,15 @@
 							</div>
 
 							<!-- Hidden fields for additional trip data -->
-							<input type="hidden" name="gradientFrom" bind:value={tripData.gradientFrom} />
-							<input type="hidden" name="gradientTo" bind:value={tripData.gradientTo} />
+							<div class="space-y-2">
+								<Label for="accentColor">Pick a nice accent color for your trip</Label>
+								<Input
+									type="color"
+									name="accentColor"
+									bind:value={tripData.accentColor}
+									class="h-10 max-w-40"
+								/>
+							</div>
 						</CardContent>
 					</Card>
 				</TabsContent>
