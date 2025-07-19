@@ -6,7 +6,10 @@ alwaysApply: true
 My file structure is following
 UI components (from shadcn and dumb) are inside src/lib/components/ui. other more logically heavy and app related are under src/lib/components/
 Assets are located under src/lib/assets
+files and folders shuold use kebab-case always
 
 Use separation of logic, develop shared components when they are needed. I like to run queries on server and use that data on frontend.
 I use shadcn components, I write clean well readen code. Code is broken down by what it does.
 Pages are consistent from the components and customly added elements, don't over create components when not needed
+
+Have db schema in mind when writing code, so you know how it should work.
