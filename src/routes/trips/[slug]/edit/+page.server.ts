@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, params }) => {
+	createOrEditBasicInfo: async ({ request, params }) => {
 		const { slug } = params;
 		const data = await request.formData();
 
@@ -41,5 +41,11 @@ export const actions: Actions = {
 			.get();
 
 		return { success: true, trip: updatedTrip };
+	},
+	createOrEditItinerary: async ({ request, params }) => {
+		const { slug } = params;
+		const data = await request.formData();
+
+		console.log('createOrEditItinerary', slug, data);
 	}
 };
