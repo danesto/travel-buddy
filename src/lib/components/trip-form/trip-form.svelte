@@ -3,10 +3,8 @@
 	import { Tabs, TabsContent, TabsList, TabsTrigger } from '$lib/components/ui/tabs/index.js';
 	import Save from '@lucide/svelte/icons/save';
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
-	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	import type { FormTripData, FormProps } from './trip-form.types.js';
-	import { toast } from 'svelte-sonner';
 
 	// Import form components
 	import BasicInfoForm from './forms/basic-info-form.svelte';
@@ -139,7 +137,11 @@
 			</TabsContent>
 
 			<TabsContent value="itinerary">
-				<ItineraryForm data={tripData.itinerary} on:change={handleItineraryChange} />
+				<ItineraryForm
+					data={tripData.itinerary}
+					tripId={tripData.id}
+					on:change={handleItineraryChange}
+				/>
 			</TabsContent>
 
 			<TabsContent value="expenses">

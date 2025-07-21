@@ -8,7 +8,7 @@
 	const trip = $derived(data.trip);
 
 	// Convert database dates to form-friendly format
-	const formData = $derived({
+	let formData = $derived({
 		...trip,
 		startDate: trip.startDate ? new Date(trip.startDate) : null,
 		endDate: trip.endDate ? new Date(trip.endDate) : null,
@@ -16,6 +16,10 @@
 		expenses: [],
 		accommodations: [],
 		transportation: []
+	});
+
+	$effect(() => {
+		console.log('formData', trip);
 	});
 </script>
 

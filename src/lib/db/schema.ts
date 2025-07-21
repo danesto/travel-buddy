@@ -1,4 +1,5 @@
 import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { relations } from 'drizzle-orm';
 
 // Main trip table
 export const trips = sqliteTable('trips', {
@@ -165,3 +166,80 @@ export const notes = sqliteTable('notes', {
 		.notNull()
 		.$defaultFn(() => new Date())
 });
+
+// --- RELATIONS ---
+
+export const tripsRelations = relations(trips, ({ many }) => ({
+	itineraryItems: many(itineraryItems),
+	expenses: many(expenses),
+	accommodations: many(accommodations),
+	transportation: many(transportation),
+	diaryEntries: many(diaryEntries),
+	photos: many(photos),
+	notes: many(notes)
+}));
+
+export const itineraryItemsRelations = relations(itineraryItems, ({ one, many }) => ({
+	trip: one(trips, {
+		fields: [itineraryItems.tripId],
+		references: [trips.id]
+	}),
+	activities: many(activities)
+}));
+
+export const activitiesRelations = relations(activities, ({ one }) => ({
+	itineraryItem: one(itineraryItems, {
+		fields: [activities.itineraryItemId],
+		references: [itineraryItems.id]
+	})
+}));
+
+export const expensesRelations = relations(expenses, ({ one }) => ({
+	trip: one(trips, {
+		fields: [expenses.tripId],
+		references: [trips.id]
+	})
+}));
+
+export const accommodationsRelations = relations(accommodations, ({ one, many }) => ({
+	trip: one(trips, {
+		fields: [accommodations.tripId],
+		references: [trips.id]
+	}),
+	amenities: many(amenities)
+}));
+
+export const amenitiesRelations = relations(amenities, ({ one }) => ({
+	accommodation: one(accommodations, {
+		fields: [amenities.accommodationId],
+		references: [accommodations.id]
+	})
+}));
+
+export const transportationRelations = relations(transportation, ({ one }) => ({
+	trip: one(trips, {
+		fields: [transportation.tripId],
+		references: [trips.id]
+	})
+}));
+
+export const diaryEntriesRelations = relations(diaryEntries, ({ one }) => ({
+	trip: one(trips, {
+		fields: [diaryEntries.tripId],
+		references: [trips.id]
+	})
+}));
+
+export const photosRelations = relations(photos, ({ one }) => ({
+	trip: one(trips, {
+		fields: [photos.tripId],
+		references: [trips.id]
+	})
+}));
+
+export const notesRelations = relations(notes, ({ one }) => ({
+	trip: one(trips, {
+		fields: [notes.tripId],
+		references: [trips.id]
+	})
+}));

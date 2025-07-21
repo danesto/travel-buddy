@@ -1,13 +1,20 @@
 import { db } from '$lib/db/index.js';
-import { trips } from '$lib/db/schema.js';
+import { itineraryItems, trips } from '$lib/db/schema.js';
 import type { PageServerLoad, Actions } from './$types.js';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
+import type { FormItineraryItem } from '$lib/components/trip-form/trip-form.types.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { slug } = params;
 
-	const trip = await db.select().from(trips).where(eq(trips.slug, slug)).get();
+	// this returns empty itinerary items even tho there are some in the database
+	const trip = await db.query.trips.findFirst({
+		where: eq(trips.slug, slug),
+		with: {
+			itineraryItems: true
+		}
+	});
 
 	if (!trip) {
 		throw error(404, 'Trip not found');
@@ -42,10 +49,75 @@ export const actions: Actions = {
 
 		return { success: true, trip: updatedTrip };
 	},
-	createOrEditItinerary: async ({ request, params }) => {
-		const { slug } = params;
-		const data = await request.formData();
+	createOrEditItinerary: async ({ request }) => {
+		const formData = await request.formData();
 
-		console.log('createOrEditItinerary', slug, data);
+		console.log('formData', formData.getAll('itinerary'));
+
+		// Convert FormData to an object first
+		const rawData = Object.fromEntries(formData);
+
+		console.log('rawData', rawData.tripId);
+
+		// Initialize array to store itinerary items
+		const itinerary: FormItineraryItem[] = [];
+
+		// Group form fields by day index
+		const dayIndices = new Set(
+			Array.from(formData.keys())
+				.map((key) => key.match(/itinerary\[(\d+)\]/)?.[1])
+				.filter(Boolean)
+		);
+
+		// Reconstruct itinerary items
+		for (const dayIndex of dayIndices) {
+			const prefix = `itinerary[${dayIndex}]`;
+			const activities: string[] = [];
+
+			// Collect all activities for this day
+			for (let i = 0; ; i++) {
+				const activity = rawData[`${prefix}.activities[${i}]`];
+				if (!activity) break;
+				activities.push(activity.toString());
+			}
+
+			const item: FormItineraryItem = {
+				// If id is not present, set it to undefined to avoid conflict and insertion of 0 id row
+				id: Number(rawData[`${prefix}.id`]) || undefined,
+				day: rawData[`${prefix}.day`]?.toString() || '',
+				date: rawData[`${prefix}.date`]?.toString() || '',
+				location: rawData[`${prefix}.location`]?.toString() || '',
+				activities,
+				highlights: rawData[`${prefix}.highlights`]?.toString() || '',
+				tripId: Number(rawData.tripId)
+			};
+
+			itinerary.push(item);
+		}
+
+		console.log('itinerary', itinerary);
+
+		await db
+			.insert(itineraryItems)
+			.values(
+				itinerary.map((item) => ({
+					...item,
+					tripId: item.tripId as number
+				}))
+			)
+			.onConflictDoUpdate({
+				target: [itineraryItems.id],
+				set: {
+					highlights: sql`excluded.highlights`,
+					location: sql`excluded.location`,
+					date: sql`excluded.date`,
+					day: sql`excluded.day`
+				}
+			});
+
+		// TODO: Save to database
+		// await db.insert(itineraryItems).values(itinerary).returning();
+
+		return { success: true, itinerary };
 	}
 };
