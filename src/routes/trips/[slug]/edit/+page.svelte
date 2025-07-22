@@ -12,7 +12,7 @@
 		...trip,
 		startDate: trip.startDate ? new Date(trip.startDate) : null,
 		endDate: trip.endDate ? new Date(trip.endDate) : null,
-		itinerary: [],
+		itinerary: trip.itineraryItems ?? [],
 		expenses: [],
 		accommodations: [],
 		transportation: []

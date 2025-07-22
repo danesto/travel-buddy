@@ -8,11 +8,14 @@ import type { FormItineraryItem } from '$lib/components/trip-form/trip-form.type
 export const load: PageServerLoad = async ({ params }) => {
 	const { slug } = params;
 
-	// this returns empty itinerary items even tho there are some in the database
 	const trip = await db.query.trips.findFirst({
 		where: eq(trips.slug, slug),
 		with: {
-			itineraryItems: true
+			itineraryItems: {
+				with: {
+					activities: true
+				}
+			}
 		}
 	});
 
@@ -51,52 +54,38 @@ export const actions: Actions = {
 	},
 	createOrEditItinerary: async ({ request }) => {
 		const formData = await request.formData();
-
-		console.log('formData', formData.getAll('itinerary'));
-
-		// Convert FormData to an object first
 		const rawData = Object.fromEntries(formData);
-
-		console.log('rawData', rawData.tripId);
-
 		// Initialize array to store itinerary items
 		const itinerary: FormItineraryItem[] = [];
-
 		// Group form fields by day index
 		const dayIndices = new Set(
 			Array.from(formData.keys())
 				.map((key) => key.match(/itinerary\[(\d+)\]/)?.[1])
 				.filter(Boolean)
 		);
-
-		// Reconstruct itinerary items
 		for (const dayIndex of dayIndices) {
 			const prefix = `itinerary[${dayIndex}]`;
-			const activities: string[] = [];
-
 			// Collect all activities for this day
+			const activities: { name: string; order: number }[] = [];
 			for (let i = 0; ; i++) {
-				const activity = rawData[`${prefix}.activities[${i}]`];
-				if (!activity) break;
-				activities.push(activity.toString());
+				const activityName = rawData[`${prefix}.activities[${i}].name`];
+				if (typeof activityName === 'undefined') break;
+				activities.push({ name: activityName.toString(), order: i });
 			}
-
 			const item: FormItineraryItem = {
-				// If id is not present, set it to undefined to avoid conflict and insertion of 0 id row
 				id: Number(rawData[`${prefix}.id`]) || undefined,
 				day: rawData[`${prefix}.day`]?.toString() || '',
 				date: rawData[`${prefix}.date`]?.toString() || '',
 				location: rawData[`${prefix}.location`]?.toString() || '',
-				activities,
 				highlights: rawData[`${prefix}.highlights`]?.toString() || '',
-				tripId: Number(rawData.tripId)
+				tripId: Number(rawData.tripId),
+				activities
 			};
-
 			itinerary.push(item);
 		}
+		// Save itinerary items
 
-		console.log('itinerary', itinerary);
-
+		// Insert or update itinerary item
 		await db
 			.insert(itineraryItems)
 			.values(
@@ -114,9 +103,6 @@ export const actions: Actions = {
 					day: sql`excluded.day`
 				}
 			});
-
-		// TODO: Save to database
-		// await db.insert(itineraryItems).values(itinerary).returning();
 
 		return { success: true, itinerary };
 	}

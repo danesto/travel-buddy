@@ -16,11 +16,17 @@
 
 	// Default empty item
 	const emptyItem: FormItineraryItem = {
-		id: 0,
+		id: undefined, // use undefined for new items
 		day: '',
 		date: '',
 		location: '',
-		activities: [''],
+		activities: [
+			{
+				name: '',
+				itineraryItemId: 0,
+				order: 0
+			}
+		],
 		highlights: ''
 	};
 
@@ -47,14 +53,21 @@
 	}
 
 	function addActivity(dayIndex: number) {
-		formData[dayIndex].activities = [...formData[dayIndex].activities, ''];
+		formData[dayIndex].activities = [
+			...formData[dayIndex].activities,
+			{
+				name: '',
+				itineraryItemId: 0,
+				order: formData[dayIndex].activities.length // set order to next index
+			}
+		];
 	}
 
 	function removeActivity(dayIndex: number, activityIndex: number) {
 		// Only remove if there's more than one activity
 		if (formData[dayIndex].activities.length > 1) {
 			formData[dayIndex].activities = formData[dayIndex].activities.filter(
-				(_: string, i: number) => i !== activityIndex
+				(_: any, i: number) => i !== activityIndex
 			);
 		}
 	}
@@ -138,9 +151,9 @@
 						<div class="flex items-center gap-2">
 							<Input
 								type="text"
-								name="itinerary[{dayIndex}].activities[{activityIndex}]"
+								name="itinerary[{dayIndex}].activities[{activityIndex}].name"
 								placeholder="Visit the Caldera"
-								bind:value={item.activities[activityIndex]}
+								bind:value={item.activities[activityIndex].name}
 								required
 							/>
 							{#if item.activities.length > 1}
