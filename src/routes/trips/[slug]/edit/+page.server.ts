@@ -5,12 +5,13 @@ import { eq, sql } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import type { FormItineraryItem } from '$lib/components/trip-form/trip-form.types.js';
 import { deleteItineraryItems } from '$lib/server/itirenary-items.js';
+import { getIdFromSlug, slugify } from '$lib/utils.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { slug } = params;
 
 	const trip = await db.query.trips.findFirst({
-		where: eq(trips.slug, slug),
+		where: eq(trips.id, getIdFromSlug(slug)),
 		with: {
 			itineraryItems: true
 		}
@@ -30,10 +31,11 @@ export const actions: Actions = {
 
 		console.log('edit trip', data);
 
-		const updatedTrip = await db
+		const updatedTrip = db
 			.update(trips)
 			.set({
 				title: data.get('title')?.toString(),
+				slug: slugify(data.get('title')?.toString() || ''),
 				destination: data.get('destination')?.toString(),
 				summary: data.get('summary')?.toString(),
 				headerImage: data.get('headerImage')?.toString(),
@@ -43,7 +45,7 @@ export const actions: Actions = {
 				accentColor: data.get('accentColor')?.toString(),
 				updatedAt: new Date()
 			})
-			.where(eq(trips.slug, slug))
+			.where(eq(trips.id, getIdFromSlug(slug)))
 			.returning()
 			.get();
 

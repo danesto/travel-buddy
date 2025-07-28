@@ -8,12 +8,13 @@ export const actions = {
 		const data = await request.formData();
 		console.log('createTrip', data);
 
+		// always generate slug based on title
 		const slug = data.get('title')?.toString().toLowerCase().replace(/\s+/g, '-') || '';
 
 		const trip = await db
 			.insert(trips)
 			.values({
-				slug: slug,
+				slug,
 				title: data.get('title')?.toString() || '',
 				destination: data.get('destination')?.toString() || '',
 				destinationCountryCode: data.get('destinationCountryCode')?.toString() || '',

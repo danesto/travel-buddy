@@ -1,13 +1,11 @@
 <script>
-	let { title, summary, emoji, gradientFrom, gradientTo, ctaText = undefined } = $props();
+	let { id, title, summary, emoji, gradientFrom, gradientTo, ctaText = undefined, slug } = $props();
 
 	let ctaLabel = ctaText ?? `Explore ${title.toLowerCase()} →`;
-
-	const slug = title.toLowerCase().replace(/ /g, '-');
 </script>
 
 <a
-	href={`/trips/${slug}`}
+	href={`/trips/${slug}-${id}`}
 	class="group overflow-hidden rounded-2xl bg-white shadow-lg transition-all
 		hover:shadow-xl hover:outline-2 hover:outline-cyan-500
 	"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import DestinationCard from '$lib/components/destination-card.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import { getFlagEmoji } from '$lib/utils.js';
 
@@ -25,11 +26,7 @@
 						<p class="text-lg">No trips yet</p>
 						<p class="text-sm">Start planning your next adventure!</p>
 					</div>
-					<button
-						class="rounded-lg bg-gradient-to-r from-sky-500 to-blue-600 px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:from-sky-600 hover:to-blue-700 hover:shadow-lg"
-					>
-						Plan New Trip
-					</button>
+					<Button href="/trips/create">Plan New Trip</Button>
 				</div>
 			{/if}
 			{#each trips as trip}

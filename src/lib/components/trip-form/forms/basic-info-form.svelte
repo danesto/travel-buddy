@@ -23,7 +23,7 @@
 
 <form
 	method="POST"
-	action="?/createOrEditBasicInfo"
+	action={`${mode === 'edit' ? '?/createOrEditBasicInfo' : ''}`}
 	id="basic-info-form"
 	use:enhance={() => {
 		return async ({ update, result }) => {
@@ -42,7 +42,7 @@
 	}}
 >
 	<div class="space-y-4">
-		<div class="grid grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 gap-4">
 			<div class="space-y-2">
 				<Label for="title">Trip Title</Label>
 				<Input
@@ -51,19 +51,6 @@
 					name="title"
 					placeholder="Summer in Greece"
 					bind:value={data.title}
-					oninput={handleChange}
-					required
-				/>
-			</div>
-
-			<div class="space-y-2">
-				<Label for="slug">URL Slug</Label>
-				<Input
-					type="text"
-					id="slug"
-					name="slug"
-					placeholder="summer-in-greece"
-					bind:value={data.slug}
 					oninput={handleChange}
 					required
 				/>

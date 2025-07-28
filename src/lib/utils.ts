@@ -20,6 +20,19 @@ export function getFlagEmoji(countryCode: string) {
 	return String.fromCodePoint(...codePoints);
 }
 
+export const slugify = (text: string) => {
+	return text.toLowerCase().replace(/ /g, '-');
+};
+
+export const getIdFromSlug = (slug: string) => {
+	const id = slug.split('-').pop();
+
+	if (!id) {
+		throw new Error('No id found in slug');
+	}
+	return Number(id);
+};
+
 export const countries = [
 	{ code: 'AD', name: 'Andorra' },
 	{ code: 'AE', name: 'United Arab Emirates' },

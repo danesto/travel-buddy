@@ -101,6 +101,7 @@
 					<Button
 						type="submit"
 						class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+						form="basic-info-form"
 					>
 						<Save class="mr-2 h-4 w-4" />
 						Create Trip
@@ -126,10 +127,12 @@
 		<Tabs bind:value={activeTab} class="w-full">
 			<TabsList class="mb-8 grid w-full grid-cols-5 [&>button]:cursor-pointer">
 				<TabsTrigger value="basic-info">Basic Info</TabsTrigger>
-				<TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-				<TabsTrigger value="expenses">Expenses</TabsTrigger>
-				<TabsTrigger value="accommodations">Accommodations</TabsTrigger>
-				<TabsTrigger value="transportation">Transportation</TabsTrigger>
+				<TabsTrigger value="itinerary" disabled={mode === 'create'}>Itinerary</TabsTrigger>
+				<TabsTrigger value="expenses" disabled={mode === 'create'}>Expenses</TabsTrigger>
+				<TabsTrigger value="accommodations" disabled={mode === 'create'}>Accommodations</TabsTrigger
+				>
+				<TabsTrigger value="transportation" disabled={mode === 'create'}>Transportation</TabsTrigger
+				>
 			</TabsList>
 
 			<TabsContent value="basic-info">
