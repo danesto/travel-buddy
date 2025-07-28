@@ -7,7 +7,12 @@ export const load = async ({ params }) => {
 	const tripId = getIdFromSlug(params.slug);
 
 	return {
-		trip: db.select().from(tripsTable).where(eq(tripsTable.id, tripId)).get()
+		trip: db.query.trips.findFirst({
+			where: eq(tripsTable.id, tripId),
+			with: {
+				itineraryItems: true
+			}
+		})
 		// todo: stream each part of the trip separately to provide smoother loading experience
 		// itinerary: db.select().from(itineraryTable).where(eq(itineraryTable.tripId, params.slug))
 	};

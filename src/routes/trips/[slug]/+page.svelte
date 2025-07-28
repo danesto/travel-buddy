@@ -52,68 +52,6 @@ Our last day was bittersweet. We took a final walk through the streets of Fira, 
 Santorini exceeded all expectations - it's a place that captures your heart and soul.`
 	};
 
-	const itinerary = [
-		{
-			day: 'Day 1',
-			date: 'June 15',
-			location: 'Fira',
-			activities: ['Airport arrival', 'Hotel check-in', 'Fira exploration', 'Sunset viewing'],
-			highlights: 'First Santorini sunset from Fira cliffs'
-		},
-		{
-			day: 'Day 2',
-			date: 'June 16',
-			location: 'Oia',
-			activities: [
-				'Morning walk to Oia',
-				'Blue dome photography',
-				'Lunch at Ammoudi Bay',
-				'Famous Oia sunset'
-			],
-			highlights: 'Iconic Oia sunset experience'
-		},
-		{
-			day: 'Day 3',
-			date: 'June 17',
-			location: 'Red Beach & Akrotiri',
-			activities: [
-				'Red Beach visit',
-				'Akrotiri archaeological site',
-				'Beach relaxation',
-				'Seafood dinner'
-			],
-			highlights: 'Ancient Minoan ruins at Akrotiri'
-		},
-		{
-			day: 'Day 4',
-			date: 'June 18',
-			location: 'Perissa Beach',
-			activities: ['Black sand beach', 'Water sports', 'Beachside lunch', 'Evening in Fira'],
-			highlights: 'Volcanic black sand beach experience'
-		},
-		{
-			day: 'Day 5',
-			date: 'June 19',
-			location: 'Wine Tour',
-			activities: ['Santo Wines visit', 'Venetsanos Winery', 'Wine tasting', 'Vineyard tour'],
-			highlights: 'Assyrtiko wine tasting with caldera views'
-		},
-		{
-			day: 'Day 6',
-			date: 'June 20',
-			location: 'Fira & Shopping',
-			activities: ['Local market visit', 'Souvenir shopping', 'Museum visit', 'Final sunset'],
-			highlights: 'Authentic Greek products and local crafts'
-		},
-		{
-			day: 'Day 7',
-			date: 'June 21',
-			location: 'Departure',
-			activities: ['Hotel checkout', 'Final breakfast', 'Airport departure'],
-			highlights: 'Farewell to paradise'
-		}
-	];
-
 	const expenses = [
 		{
 			category: 'Accommodation',
@@ -202,6 +140,7 @@ Santorini exceeded all expectations - it's a place that captures your heart and 
 	];
 
 	const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
 </script>
 
 <svelte:head>
@@ -282,38 +221,44 @@ Santorini exceeded all expectations - it's a place that captures your heart and 
 				</div>
 
 				<!-- Trip Itinerary -->
-				<CollapsibleSection title="Trip Itinerary" icon="🗺️">
-					{#snippet children()}
-						<div class="space-y-6">
-							{#each itinerary as day}
-								<div class="border-l-4 border-cyan-500 pb-6 pl-6">
-									<div class="mb-3 flex items-center gap-3">
-										<h3 class="text-lg font-semibold text-gray-800">{day.day}</h3>
-										<span class="text-sm text-gray-500">{day.date}</span>
-										<span
-											class="rounded-full bg-cyan-100 px-3 py-1 text-sm font-medium text-cyan-700"
-											>{day.location}</span
-										>
+				 {#if trip.itineraryItems && trip.itineraryItems.length}
+					<CollapsibleSection title="Trip Itinerary" icon="🗺️">
+						{#snippet children()}
+							<div class="space-y-6">
+								{#each trip.itineraryItems as day}
+									<div class="border-l-4 border-cyan-500 pb-6 pl-6">
+										<div class="mb-3 flex items-center gap-3">
+											<h3 class="text-lg font-semibold text-gray-800">{day.day}</h3>
+											<span class="text-sm text-gray-500">{day.date}</span>
+											<span
+												class="rounded-full bg-cyan-100 px-3 py-1 text-sm font-medium text-cyan-700"
+												>{day.location}</span
+											>
+										</div>
+										
+										{#if day.activities}
+											<div class="mb-3">
+												<h4 class="mb-2 font-medium text-gray-700">Activities:</h4>
+												<ul class="flex flex-wrap gap-2">
+													<p class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
+														{day.activities}
+													</p>
+												</ul>
+											</div>
+										{/if}
+										
+										{#if day.highlights}
+											<div class="text-sm text-gray-600">
+												<strong>Highlight:</strong>
+												{day.highlights}
+											</div>
+										{/if}
 									</div>
-									<div class="mb-3">
-										<h4 class="mb-2 font-medium text-gray-700">Activities:</h4>
-										<ul class="flex flex-wrap gap-2">
-											{#each day.activities as activity}
-												<li class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
-													{activity}
-												</li>
-											{/each}
-										</ul>
-									</div>
-									<div class="text-sm text-gray-600">
-										<strong>Highlight:</strong>
-										{day.highlights}
-									</div>
-								</div>
-							{/each}
-						</div>
-					{/snippet}
-				</CollapsibleSection>
+								{/each}
+							</div>
+						{/snippet}
+					</CollapsibleSection>
+				{/if}
 
 				<!-- Expenses -->
 				<CollapsibleSection title="Trip Expenses" icon="💰">

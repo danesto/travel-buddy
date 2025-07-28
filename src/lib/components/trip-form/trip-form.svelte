@@ -17,7 +17,7 @@
 	let { defaultValues = {}, mode = 'create' }: FormProps = $props();
 
 	// Form state with proper defaults
-	let tripData: FormTripData = {
+	let tripData: FormTripData = $state({
 		slug: '',
 		title: '',
 		destination: '',
@@ -32,7 +32,7 @@
 		accommodations: [],
 		transportation: [],
 		...defaultValues
-	};
+	});
 
 	let activeTab = $state('basic-info');
 	let originalData = $state<string>('');
@@ -48,31 +48,6 @@
 		const currentData = JSON.stringify(tripData);
 		isFormDirty = currentData !== originalData;
 	});
-
-	// Handle form section changes
-	function handleBasicInfoChange({ detail }: CustomEvent<{ data: Partial<FormTripData> }>) {
-		tripData = { ...tripData, ...detail.data };
-	}
-
-	function handleItineraryChange({ detail }: CustomEvent<{ data: FormTripData['itinerary'] }>) {
-		tripData.itinerary = detail.data;
-	}
-
-	function handleExpensesChange({ detail }: CustomEvent<{ data: FormTripData['expenses'] }>) {
-		tripData.expenses = detail.data;
-	}
-
-	function handleAccommodationsChange({
-		detail
-	}: CustomEvent<{ data: FormTripData['accommodations'] }>) {
-		tripData.accommodations = detail.data;
-	}
-
-	function handleTransportationChange({
-		detail
-	}: CustomEvent<{ data: FormTripData['transportation'] }>) {
-		tripData.transportation = detail.data;
-	}
 </script>
 
 <div
@@ -136,27 +111,23 @@
 			</TabsList>
 
 			<TabsContent value="basic-info">
-				<BasicInfoForm data={tripData} {mode} on:change={handleBasicInfoChange} />
+				<BasicInfoForm data={tripData} {mode} />
 			</TabsContent>
 
 			<TabsContent value="itinerary">
-				<ItineraryForm
-					data={tripData.itinerary}
-					tripId={tripData.id}
-					on:change={handleItineraryChange}
-				/>
+				<ItineraryForm data={tripData.itinerary} tripId={tripData.id} />
 			</TabsContent>
 
 			<TabsContent value="expenses">
-				<ExpensesForm data={tripData.expenses} on:change={handleExpensesChange} />
+				<ExpensesForm data={tripData.expenses} />
 			</TabsContent>
 
 			<TabsContent value="accommodations">
-				<AccommodationsForm data={tripData.accommodations} on:change={handleAccommodationsChange} />
+				<AccommodationsForm data={tripData.accommodations} />
 			</TabsContent>
 
 			<TabsContent value="transportation">
-				<TransportationForm data={tripData.transportation} on:change={handleTransportationChange} />
+				<TransportationForm data={tripData.transportation} />
 			</TabsContent>
 		</Tabs>
 	</div>

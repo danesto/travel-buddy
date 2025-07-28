@@ -8,7 +8,7 @@ import type {
 
 export type FormItineraryItem = Omit<typeof itineraryItemsSchema.$inferInsert, 'tripId'> & {
 	tripId?: number;
-	activities: string;
+	activities: string | null;
 };
 
 export type FormExpense = Omit<typeof expensesSchema.$inferInsert, 'tripId' | 'amount'> & {

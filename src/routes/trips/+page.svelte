@@ -20,14 +20,14 @@
 			<Skeleton class="h-48 w-full" />
 		{:then trips}
 			{#if !trips.length}
-				<div class="rounded-2xl bg-white p-8 text-center shadow-lg">
-					<div class="mb-4 text-gray-400">
-						<div class="mb-4 text-6xl">✈️</div>
-						<p class="text-lg">No trips yet</p>
-						<p class="text-sm">Start planning your next adventure!</p>
-					</div>
-					<Button href="/trips/create">Plan New Trip</Button>
-				</div>
+				<DestinationCard
+					href="/trips/create"
+					title="Start planning your next adventure!"
+					summary="No Trips Yet"
+					gradientFrom="#4f46e5"
+					gradientTo="#8b5cf6"
+					emoji="🗺️"
+				/>
 			{/if}
 			{#each trips as trip}
 				<DestinationCard
@@ -37,6 +37,15 @@
 					emoji={getFlagEmoji(trip.destinationCountryCode)}
 				/>
 			{/each}
+			<DestinationCard
+				href="/trips/create"
+				title="Create New Trip"
+				summary="Start planning your next adventure"
+				gradientFrom="#4f46e5"
+				gradientTo="#8b5cf6"
+				emoji="🗺️"
+				ctaText="Start Planning →"
+			/>
 		{:catch error}
 			<p>error loading trips: {error.message}</p>
 		{/await}

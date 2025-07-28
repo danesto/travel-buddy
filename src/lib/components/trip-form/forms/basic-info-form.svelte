@@ -6,19 +6,9 @@
 	import { countries, getFlagEmoji } from '$lib/utils.js';
 	import { toast } from 'svelte-sonner';
 	import type { FormTripData } from '../trip-form.types.js';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher<{
-		change: { data: Partial<FormTripData> };
-	}>();
 
 	export let data: Partial<FormTripData> = {};
 	export let mode: 'create' | 'edit' = 'create';
-
-	// Watch for changes and dispatch them
-	function handleChange() {
-		dispatch('change', { data });
-	}
 </script>
 
 <form
@@ -51,7 +41,6 @@
 					name="title"
 					placeholder="Summer in Greece"
 					bind:value={data.title}
-					oninput={handleChange}
 					required
 				/>
 			</div>
@@ -66,7 +55,6 @@
 					name="destination"
 					placeholder="Santorini, Greece"
 					bind:value={data.destination}
-					oninput={handleChange}
 					required
 				/>
 			</div>
@@ -78,7 +66,6 @@
 					name="destinationCountryCode"
 					class="border-input bg-background w-full rounded-md border px-3 py-2"
 					bind:value={data.destinationCountryCode}
-					onchange={handleChange}
 					required
 				>
 					{#each countries as country}
@@ -94,24 +81,12 @@
 		<div class="grid grid-cols-2 gap-4">
 			<div class="space-y-2">
 				<Label for="startDate">Start Date</Label>
-				<Input
-					type="date"
-					id="startDate"
-					name="startDate"
-					bind:value={data.startDate}
-					oninput={handleChange}
-				/>
+				<Input type="date" id="startDate" name="startDate" bind:value={data.startDate} />
 			</div>
 
 			<div class="space-y-2">
 				<Label for="endDate">End Date</Label>
-				<Input
-					type="date"
-					id="endDate"
-					name="endDate"
-					bind:value={data.endDate}
-					oninput={handleChange}
-				/>
+				<Input type="date" id="endDate" name="endDate" bind:value={data.endDate} />
 			</div>
 		</div>
 
@@ -122,7 +97,6 @@
 				name="summary"
 				placeholder="Write a brief description of your trip..."
 				bind:value={data.summary}
-				oninput={handleChange}
 				required
 			/>
 		</div>
@@ -135,19 +109,12 @@
 				name="headerImage"
 				placeholder="https://example.com/image.jpg"
 				bind:value={data.headerImage}
-				oninput={handleChange}
 			/>
 		</div>
 
 		<div class="space-y-2">
 			<Label for="accentColor">Accent Color</Label>
-			<Input
-				type="color"
-				id="accentColor"
-				name="accentColor"
-				bind:value={data.accentColor}
-				oninput={handleChange}
-			/>
+			<Input type="color" id="accentColor" name="accentColor" bind:value={data.accentColor} />
 		</div>
 	</div>
 </form>
