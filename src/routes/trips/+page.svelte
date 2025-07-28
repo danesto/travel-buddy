@@ -1,6 +1,5 @@
 <script lang="ts">
 	import DestinationCard from '$lib/components/destination-card.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import { getFlagEmoji } from '$lib/utils.js';
 

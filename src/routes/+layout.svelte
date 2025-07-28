@@ -45,7 +45,7 @@
 
 <header
 	class="relative flex w-full flex-col gap-30 bg-cover bg-center bg-no-repeat
-	{isHomePage ? 'bg-transparent pt-10 pb-20' : 'bg-gradient-to-r from-blue-900 to-blue-800 pt-10'}
+	{isHomePage ? 'bg-transparent pt-10 pb-20' : 'bg-gradient-to-r from-green-900 to-green-800 pt-10'}
 "
 >
 	<nav class="bg-opacity-95 relative z-20 w-full {isHomePage && 'shadow-sm'} bg-transparent">
@@ -56,7 +56,7 @@
 			<div class="flex h-16 items-center justify-between">
 				<div class="flex items-center">
 					<a href="/">
-						<h1 class="text-2xl font-bold text-white">TravelBuddy</h1>
+						<h1 class="font-serif text-2xl font-bold text-white">travel buddy</h1>
 					</a>
 				</div>
 				<div class="flex space-x-8">
