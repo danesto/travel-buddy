@@ -3,13 +3,37 @@ description: General guidlines when writing code
 globs:
 alwaysApply: true
 ---
-My file structure is following
-UI components (from shadcn and dumb) are inside src/lib/components/ui. other more logically heavy and app related are under src/lib/components/
-Assets are located under src/lib/assets
-files and folders shuold use kebab-case always
 
-Use separation of logic, develop shared components when they are needed. I like to run queries on server and use that data on frontend.
-I use shadcn components, I write clean well readen code. Code is broken down by what it does.
+# Project and code writing guidelines
+
+## Tech Stack:
+
+- SvelteKit with Svelte 5 version with runes ($state, $derived, etc)
+- SQLite DB
+- Drizzle ORM
+- TypeScript
+
+
+## File structure:
+
+- src/lib/assets - contains static assets, like images etc.
+- src/lib/components/ui - contains ui components generated from shadcn and static UI components
+- src/lib/components - contains other components that shouldn't be a part of the ui subdirectory
+- src/lib/db - contains schema designed using drizzle and exports db instance used for writing quieries
+- src/lib/server - holds server actions (functions) used to manipulate db or other data instances based on the schema - each table from the db has it's own file with it's own logic 
+- src/routes - sveltekit folder for routes (pages)
+- drizzle - holds generated migrations and snapshots from drizzle
+
+
+## Code guidelines
+
+- Use kebab-case for files and directory naming
+- Use separation of logic, develop shared components when they are needed.
+
+- Prefer `type` keyword instead of `interface`
+- Use sveltekit actions with forms to handle insertions in DB.
+
+- I use shadcn components, I write clean well readen code. Code is broken down by what it does.
 Pages are consistent from the components and customly added elements, don't over create components when not needed
 
-Have db schema in mind when writing code, so you know how it should work.
+- Always have db schema in mind when writing code, so you know how it should work.

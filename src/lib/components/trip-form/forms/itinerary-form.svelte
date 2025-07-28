@@ -33,6 +33,7 @@
 	// Props with default value ensuring at least one item
 	let { data, tripId } = $props<{ data?: FormItineraryItem[]; tripId?: number }>();
 	let formData = $state([...data, { ...emptyItem }]);
+	let removedItineraryItemsIds = $state<number[]>([]);
 
 	console.log('data', data);
 
@@ -48,6 +49,10 @@
 	function removeItineraryItem(index: number) {
 		// Only remove if there's more than one item
 		if (formData.length > 1) {
+			const removed = formData[index];
+			if (removed.id !== undefined) {
+				removedItineraryItemsIds = [...removedItineraryItemsIds, removed.id];
+			}
 			formData = formData.filter((_: FormItineraryItem, i: number) => i !== index);
 		}
 	}
@@ -187,6 +192,12 @@
 		{/each}
 
 		<input type="hidden" name="tripId" value={tripId} />
+
+		<input
+			type="hidden"
+			name="removedItineraryItemsIds"
+			value={removedItineraryItemsIds.join(',')}
+		/>
 
 		<Button type="button" variant="outline" class="w-full" onclick={addItineraryItem}>
 			<Plus class="mr-2 h-4 w-4" />

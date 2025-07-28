@@ -4,6 +4,7 @@ import type { PageServerLoad, Actions } from './$types.js';
 import { eq, sql } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import type { FormItineraryItem } from '$lib/components/trip-form/trip-form.types.js';
+import { deleteItineraryItems } from '$lib/server/itirenary-items.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { slug } = params;
@@ -55,6 +56,21 @@ export const actions: Actions = {
 	createOrEditItinerary: async ({ request }) => {
 		const formData = await request.formData();
 		const rawData = Object.fromEntries(formData);
+
+		const removedItineraryItemsIds = rawData.removedItineraryItemsIds
+			?.toString()
+			.split(',')
+			.map(Number);
+
+		console.log('removed items', removedItineraryItemsIds);
+
+		let deletedItems: number[] = [];
+
+		if (removedItineraryItemsIds?.length) {
+			deletedItems =
+				(await deleteItineraryItems(removedItineraryItemsIds)).data?.map((trip) => trip.id) ?? [];
+		}
+
 		// Initialize array to store itinerary items
 		const itinerary: FormItineraryItem[] = [];
 		// Group form fields by day index
@@ -104,6 +120,6 @@ export const actions: Actions = {
 				}
 			});
 
-		return { success: true, itinerary };
+		return { success: true, itinerary, deletedItems };
 	}
 };
