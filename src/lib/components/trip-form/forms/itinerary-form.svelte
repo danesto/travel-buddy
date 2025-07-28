@@ -20,13 +20,7 @@
 		day: '',
 		date: '',
 		location: '',
-		activities: [
-			{
-				name: '',
-				itineraryItemId: 0,
-				order: 0
-			}
-		],
+		activities: '', // Now a string
 		highlights: ''
 	};
 
@@ -54,26 +48,6 @@
 				removedItineraryItemsIds = [...removedItineraryItemsIds, removed.id];
 			}
 			formData = formData.filter((_: FormItineraryItem, i: number) => i !== index);
-		}
-	}
-
-	function addActivity(dayIndex: number) {
-		formData[dayIndex].activities = [
-			...formData[dayIndex].activities,
-			{
-				name: '',
-				itineraryItemId: 0,
-				order: formData[dayIndex].activities.length // set order to next index
-			}
-		];
-	}
-
-	function removeActivity(dayIndex: number, activityIndex: number) {
-		// Only remove if there's more than one activity
-		if (formData[dayIndex].activities.length > 1) {
-			formData[dayIndex].activities = formData[dayIndex].activities.filter(
-				(_: any, i: number) => i !== activityIndex
-			);
 		}
 	}
 </script>
@@ -150,33 +124,14 @@
 					/>
 				</div>
 
-				<div class="mt-4 space-y-4">
-					<Label>Activities</Label>
-					{#each item.activities as activity, activityIndex}
-						<div class="flex items-center gap-2">
-							<Input
-								type="text"
-								name="itinerary[{dayIndex}].activities[{activityIndex}].name"
-								placeholder="Visit the Caldera"
-								bind:value={item.activities[activityIndex].name}
-								required
-							/>
-							{#if item.activities.length > 1}
-								<Button
-									type="button"
-									variant="destructive"
-									size="sm"
-									onclick={() => removeActivity(dayIndex, activityIndex)}
-								>
-									<Trash2 class="h-4 w-4" />
-								</Button>
-							{/if}
-						</div>
-					{/each}
-					<Button type="button" variant="outline" size="sm" onclick={() => addActivity(dayIndex)}>
-						<Plus class="mr-2 h-4 w-4" />
-						Add Activity
-					</Button>
+				<div class="mt-4 space-y-2">
+					<Label for="activities-{dayIndex}">Activities</Label>
+					<Textarea
+						id="activities-{dayIndex}"
+						name="itinerary[{dayIndex}].activities"
+						placeholder="List activities for the day..."
+						bind:value={item.activities}
+					/>
 				</div>
 
 				<div class="mt-4 space-y-2">

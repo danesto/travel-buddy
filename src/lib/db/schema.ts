@@ -31,19 +31,7 @@ export const itineraryItems = sqliteTable('itinerary_items', {
 	date: text('date').notNull(), // e.g., "June 15"
 	location: text('location').notNull(),
 	highlights: text('highlights'),
-	createdAt: integer('created_at', { mode: 'timestamp' })
-		.notNull()
-		.$defaultFn(() => new Date())
-});
-
-// Activities within each itinerary item
-export const activities = sqliteTable('activities', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
-	itineraryItemId: integer('itinerary_item_id')
-		.notNull()
-		.references(() => itineraryItems.id, { onDelete: 'cascade' }),
-	name: text('name').notNull(),
-	order: integer('order').notNull(), // For ordering activities within a day
+	activities: text('activities'),
 	createdAt: integer('created_at', { mode: 'timestamp' })
 		.notNull()
 		.$defaultFn(() => new Date())
@@ -179,18 +167,10 @@ export const tripsRelations = relations(trips, ({ many }) => ({
 	notes: many(notes)
 }));
 
-export const itineraryItemsRelations = relations(itineraryItems, ({ one, many }) => ({
+export const itineraryItemsRelations = relations(itineraryItems, ({ one }) => ({
 	trip: one(trips, {
 		fields: [itineraryItems.tripId],
 		references: [trips.id]
-	}),
-	activities: many(activities)
-}));
-
-export const activitiesRelations = relations(activities, ({ one }) => ({
-	itineraryItem: one(itineraryItems, {
-		fields: [activities.itineraryItemId],
-		references: [itineraryItems.id]
 	})
 }));
 

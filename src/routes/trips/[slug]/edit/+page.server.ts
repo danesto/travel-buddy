@@ -12,11 +12,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	const trip = await db.query.trips.findFirst({
 		where: eq(trips.slug, slug),
 		with: {
-			itineraryItems: {
-				with: {
-					activities: true
-				}
-			}
+			itineraryItems: true
 		}
 	});
 
@@ -82,12 +78,8 @@ export const actions: Actions = {
 		for (const dayIndex of dayIndices) {
 			const prefix = `itinerary[${dayIndex}]`;
 			// Collect all activities for this day
-			const activities: { name: string; order: number }[] = [];
-			for (let i = 0; ; i++) {
-				const activityName = rawData[`${prefix}.activities[${i}].name`];
-				if (typeof activityName === 'undefined') break;
-				activities.push({ name: activityName.toString(), order: i });
-			}
+			// const activities = rawData[`${prefix}.activities`]?.toString() || '';
+
 			const item: FormItineraryItem = {
 				id: Number(rawData[`${prefix}.id`]) || undefined,
 				day: rawData[`${prefix}.day`]?.toString() || '',
@@ -95,7 +87,7 @@ export const actions: Actions = {
 				location: rawData[`${prefix}.location`]?.toString() || '',
 				highlights: rawData[`${prefix}.highlights`]?.toString() || '',
 				tripId: Number(rawData.tripId),
-				activities
+				activities: rawData[`${prefix}.activities`]?.toString() || ''
 			};
 			itinerary.push(item);
 		}

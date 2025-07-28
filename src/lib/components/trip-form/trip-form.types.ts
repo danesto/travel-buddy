@@ -3,18 +3,12 @@ import type {
 	itineraryItems as itineraryItemsSchema,
 	expenses as expensesSchema,
 	accommodations as accommodationsSchema,
-	transportation as transportationSchema,
-	activities as activitiesSchema
+	transportation as transportationSchema
 } from '$lib/db/schema.js';
-
-// Form-specific types that extend database types for UI purposes
-export type FormActivity = Omit<typeof activitiesSchema.$inferInsert, 'itineraryItemId'> & {
-	itineraryItemId?: number;
-};
 
 export type FormItineraryItem = Omit<typeof itineraryItemsSchema.$inferInsert, 'tripId'> & {
 	tripId?: number;
-	activities: FormActivity[];
+	activities: string;
 };
 
 export type FormExpense = Omit<typeof expensesSchema.$inferInsert, 'tripId' | 'amount'> & {
