@@ -23,7 +23,7 @@
 					href="/trips/create"
 					title="Start planning your next adventure!"
 					summary="No Trips Yet"
-					gradientFrom="#4f46e5"
+					gradientFrom="#ff6900"
 					gradientTo="#8b5cf6"
 					emoji="🗺️"
 				/>
@@ -40,7 +40,7 @@
 				href="/trips/create"
 				title="Create New Trip"
 				summary="Start planning your next adventure"
-				gradientFrom="#4f46e5"
+				gradientFrom="#ff6900"
 				gradientTo="#8b5cf6"
 				emoji="🗺️"
 				ctaText="Start Planning →"

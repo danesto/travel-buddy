@@ -6,6 +6,7 @@
 
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import SearchBox from '$lib/components/search-box.svelte';
 
 	let { children } = $props();
 
@@ -113,32 +114,7 @@
 			</div>
 
 			<!-- Search Box -->
-			<div class="w-full max-w-5xl">
-				<div class="flex items-center rounded-4xl bg-white p-3 shadow-2xl">
-					<input
-						type="text"
-						placeholder="Where to?"
-						class="flex-1 border-none bg-transparent p-4 text-lg focus:ring-0 focus:outline-none"
-					/>
-					<div class="mx-2 h-12 w-px bg-gray-300"></div>
-					<input
-						type="date"
-						placeholder="When?"
-						class="flex-1 border-none bg-transparent p-4 text-lg focus:ring-0 focus:outline-none"
-					/>
-					<div class="mx-2 h-12 w-px bg-gray-300"></div>
-					<input
-						type="number"
-						placeholder="Guests"
-						class="flex-1 border-none bg-transparent p-4 text-lg focus:ring-0 focus:outline-none"
-					/>
-					<button
-						class="cursor-pointer rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 px-8 py-4 text-lg font-semibold text-white shadow-md transition-all duration-300 hover:from-sky-600 hover:to-blue-700 hover:shadow-lg"
-					>
-						Search
-					</button>
-				</div>
-			</div>
+			<SearchBox />
 		</div>
 	{/if}
 </header>
