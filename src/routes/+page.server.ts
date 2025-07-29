@@ -1,4 +1,4 @@
-import { suggestTrip } from '$lib/server/planner.js';
+import { suggestTrip } from '$lib/server/ai-planner.js';
 import { fail } from '@sveltejs/kit';
 
 export const actions = {

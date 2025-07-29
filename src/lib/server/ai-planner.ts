@@ -29,7 +29,8 @@ export type SuggestedTrip = {
 	accommodations: (typeof accommodations.$inferInsert)[];
 };
 
-async function callGemini(prompt: string) {
+// this will be replaced with gemini SDK
+async function sendPromptToGemini(prompt: string) {
 	const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
@@ -50,8 +51,10 @@ function buildPrompt({ location, startDate, endDate, persons, flexible }: AiTrip
 
 export async function suggestTrip(search: AiTripSearch) {
 	const prompt = buildPrompt(search);
-	const aiResponse = await callGemini(prompt);
+	const aiResponse = await sendPromptToGemini(prompt);
+
 	let trip: SuggestedTrip;
+
 	try {
 		trip = JSON.parse(aiResponse);
 	} catch {
