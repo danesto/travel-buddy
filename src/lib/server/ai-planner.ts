@@ -3,8 +3,6 @@ import { trips, transportation, accommodations } from '$lib/db/schema.js';
 import { slugify } from '$lib/utils.js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_API_URL =
-	'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // Type for input
 export type AiTripSearch = {
@@ -29,18 +27,19 @@ export type SuggestedTrip = {
 	accommodations: (typeof accommodations.$inferInsert)[];
 };
 
-// this will be replaced with gemini SDK
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY as string);
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
 async function sendPromptToGemini(prompt: string) {
-	const res = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			contents: [{ parts: [{ text: prompt }] }]
-		})
-	});
-	if (!res.ok) throw new Error('Gemini API error');
-	const data = await res.json();
-	return data.candidates?.[0]?.content?.parts?.[0]?.text;
+	try {
+		const result = await model.generateContent(prompt);
+		const response = await result.response;
+		return response.text();
+	} catch (error) {
+		throw new Error(`Gemini API error: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 function buildPrompt({ location, startDate, endDate, persons, flexible }: AiTripSearch) {
