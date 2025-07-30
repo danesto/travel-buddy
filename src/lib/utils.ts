@@ -33,6 +33,28 @@ export const getIdFromSlug = (slug: string) => {
 	return Number(id);
 };
 
+/**
+ * Cleans a string by removing leading "```json" and trailing "```" markdown code block fences.
+ *
+ * @param {string} rawString The input string potentially wrapped in markdown fences.
+ * @returns {string} The cleaned string, with fences removed.
+ */
+export function sanitizeAIResponse(rawString: string): string {
+	let cleanedString = rawString.trim();
+
+	const jsonStartTag = '```json';
+	if (cleanedString.startsWith(jsonStartTag)) {
+		cleanedString = cleanedString.substring(jsonStartTag.length).trim();
+	}
+
+	const jsonEndTag = '```';
+	if (cleanedString.endsWith(jsonEndTag)) {
+		cleanedString = cleanedString.substring(0, cleanedString.length - jsonEndTag.length).trim();
+	}
+
+	return cleanedString;
+}
+
 export const countries = [
 	{ code: 'AD', name: 'Andorra' },
 	{ code: 'AE', name: 'United Arab Emirates' },
